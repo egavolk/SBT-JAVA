@@ -15,8 +15,13 @@ public class Task<T> {
     }
 
     public T get() {
-        if (finishedCall.get()) return result;
-        if (finishedCall.get()) throw exception;
+        if (finishedCall.get()) {
+            if (exception == null) {
+                return result;
+            } else {
+                throw exception;
+            }
+        }
 
 
         boolean needCall = startedCall.getAndSet(true);
@@ -43,8 +48,11 @@ public class Task<T> {
                 } catch (InterruptedException ignore) {
                 }
             }
-            if (result != null) return result;
-            throw exception;
+            if (exception == null) {
+                return result;
+            } else {
+                throw exception;
+            }
         }
     }
 }
